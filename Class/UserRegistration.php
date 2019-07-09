@@ -24,8 +24,9 @@ Class UserRegistration extends DBConnect{
 
                 $count = $db->rowCount();
                 if($count == 1) {
-                    $userID = $dbConnection->lastInsertId(); 
+                    $user= $dbConnection->lastInsertId(); 
                     $dbConnection = null;
+                    $_SESSION['username']=$user;
                     return true;
                 } else {
                     $dbConnection = null;

@@ -1,26 +1,23 @@
 <?php
 
-require('Class/UserRegistration.php');
-$userRegistration = new UserRegistration();
+require('Class/UserLogin.php');
+$userLogin = new UserLogin();
 
 $error = "";
-$success = "";
+
 if(!empty($_POST['submit'])) {
-    $username = $_POST['username'];
     $email = $_POST['email'];
     $password = $_POST['password'];
-    $userCheck = preg_match('~^[A-Za-z0-9_]{3,20}$~i', $username);
-    $emailCheck = preg_match('~^[a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.([a-zA-Z]{2,4})$~i', $email);
 
-    if($userCheck && $emailCheck) {
-        $userID = $userRegistration->Registration($username, $email, $password);
-        if($userID) {
-            $success = '👌 bienvenue';
+    if(strlen(trim($email)) > 1 && strlen(trim($password)) > 1) {
+        $user = $userLogin->Login($email, $password);
+        if($user) {
+            header("Location: dashboard.php");
         } else {
-            $error = '🔥💩🔥 email ou username déjà existant';
+            $error = "💩💩💩, identifiant non valide";
         }
     } else {
-        $error = '🔥🔥🔥 information non valide';
+        $error = "🔥🔥🔥 information non valide";
     }
 }
 
@@ -31,19 +28,17 @@ if(!empty($_POST['submit'])) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>S'inscrire</title>
+    <title>Login</title>
 </head>
 <body>
-    <form action="" method="post" name="register">
-        <label for="username">Username</label>
-        <input type="text" name="username">
+    <form action="" method="post" name="login">
         <label for="email">Email</label>
         <input type="text" name="email">
         <label for="password">Mot de passe</label>
         <input type="password" name="password">
-        <input type="submit" class="button" name="submit" value="Register">
+        <input type="submit" class="button" name="submit" value="Login">
     </form>
     <div><?php echo $error; ?></div>
-    <div><?php echo $success; ?></div>
+    <a href="register.php">S'enregistrer</a>
 </body>
 </html>
